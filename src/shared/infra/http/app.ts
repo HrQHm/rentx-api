@@ -3,14 +3,13 @@ import "dotenv/config";
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import swaggerUi from 'swagger-ui-express';
-
-import { router } from '@shared/infra/http/routes';
 import swaggerFile from '../../../swagger.json';
 
-import createConnection from "@shared/infra/typeorm";
 import '@shared/container';
 import { AppError } from "@shared/errors/AppError";
 import upload from "@config/upload";
+import { router } from "./routes";
+import createConnection from "@shared/infra/typeorm";
 
 createConnection();
 const app = express();

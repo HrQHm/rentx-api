@@ -1,6 +1,5 @@
-import { CarImage } from "@modules/cars/infra/typeorm/entities/CarImage";
 import { ICarsImageRepository } from "@modules/cars/repositories/ICarsImageRepository";
-import { IStorageProvider } from "@sharedcontainer/providers/StorageProvider/IStorageProvider";
+import { IStorageProvider } from "@shared/container/providers/StorageProvider/IStorageProvider";
 import { inject, injectable } from "tsyringe";
 
 interface IRequest {

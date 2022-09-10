@@ -2,7 +2,7 @@ import request from 'supertest';
 import { hash } from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import { Connection } from 'typeorm';
-import { app } from '@sharedinfra/http/app';
+import { app } from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
@@ -15,7 +15,7 @@ describe('List Categories', () => {
     const password = await hash('admin', 8);
 
     await connection.query(
-    //cammelcase precisa de aspas duplas.
+      //cammelcase precisa de aspas duplas.
       `INSERT INTO USERS (id, name, email, password, "isAdmin", created_at, driver_license) VALUES
       ('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'XXXXX');
       `
@@ -27,7 +27,7 @@ describe('List Categories', () => {
     await connection.close();
   });
 
-  it("should be able to list all available categories", async () =>{
+  it("should be able to list all available categories", async () => {
     const responseToken = await request(app).post('/sessions').send({
       email: 'admin@rentx.com.br',
       password: 'admin'

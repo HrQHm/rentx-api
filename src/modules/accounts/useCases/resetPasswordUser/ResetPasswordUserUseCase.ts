@@ -2,8 +2,8 @@ import { injectable, inject } from "tsyringe";
 import { hash } from 'bcrypt';
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
-import { IDateProvider } from "@sharedcontainer/providers/DateProvider/IDateProvider";
-import { AppError } from "@sharederrors/AppError";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
+import { AppError } from "@shared/errors/AppError";
 
 
 interface IRequest {
@@ -20,26 +20,26 @@ class ResetPasswordUserUseCase {
     private dateProvider: IDateProvider,
     @inject("UsersRepository")
     private usersRepository: IUsersRepository
-  ){}
+  ) { }
 
-  async execute({ token, password}: IRequest): Promise<void> {
+  async execute({ token, password }: IRequest): Promise<void> {
     const userToken = await this.usersTokensRepository.findByRefreshToken(token);
 
-    if(!userToken) {
+    if (!userToken) {
       throw new AppError("Token invalid");
     }
 
-    if(this.dateProvider.compareIfBefore(
-      userToken.expires_date, 
+    if (this.dateProvider.compareIfBefore(
+      userToken.expires_date,
       this.dateProvider.dateNow())
-    ){
+    ) {
       throw new AppError("Token invalid");
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);
     user.password = await hash(password, 8);
     await this.usersRepository.create(user);
-    
+
     await this.usersTokensRepository.deleteById(userToken.id);
   }
 }

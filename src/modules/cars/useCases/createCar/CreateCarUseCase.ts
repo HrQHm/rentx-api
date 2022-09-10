@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { Car } from "@modules/cars/infra/typeorm/entities/Car";
 import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
-import { AppError } from "@sharederrors/AppError";
+import { AppError } from "@shared/errors/AppError";
 import { injectable, inject } from "tsyringe";
 
 interface IRequest {
@@ -19,7 +19,7 @@ class CreateCarUseCase {
   constructor(
     @inject('CarsRepository')
     private carsRepository: ICarsRepository
-  ){}
+  ) { }
 
   async execute({
     name,
@@ -30,10 +30,10 @@ class CreateCarUseCase {
     brand,
     category_id
   }: IRequest): Promise<Car> {
-    
+
     const carAlreadyExist = await this.carsRepository.findByLicensePlate(license_plate);
 
-    if(carAlreadyExist) {
+    if (carAlreadyExist) {
       throw new AppError('Car already exist');
     }
 
