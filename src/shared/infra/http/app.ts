@@ -7,13 +7,17 @@ import swaggerFile from '../../../swagger.json';
 import cors from "cors";
 
 import '@shared/container';
-import { AppError } from "@shared/errors/AppError";
+
 import upload from "@config/upload";
 import { router } from "./routes";
+import rateLimiter from "@shared/infra/http/middlewares/rateLimiter";
 import createConnection from "@shared/infra/typeorm";
+import { AppError } from "@shared/errors/AppError";
 
 createConnection();
 const app = express();
+
+app.use(rateLimiter);
 app.use(express.json());
 app.use("/avatar", express.static(`${upload.tmpFolder}/avatar`));
 app.use("/cars", express.static(`${upload.tmpFolder}/cars`));
